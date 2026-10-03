@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSCS 肌力與體能｜全書選擇題遊戲</title>
+<style>
+:root{--bg:#f4f7ff;--panel:#fff;--ink:#1f2937;--muted:#6b7280;--blue:#1a56db;--green:#15803d;--red:#dc2626;--orange:#ea580c;--purple:#7c3aed;--line:#dbe4ff}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#111c34;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;flex-wrap:wrap}
+header .logo{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#1a56db,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900}
+header h1{font-size:18px;margin:0}
+header p{margin:2px 0 0;font-size:12px;opacity:.7}
+header .spacer{flex:1}
+main{max-width:920px;margin:0 auto;padding:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 2px 12px rgba(26,86,219,.08);margin-bottom:14px}
+.panel h2{margin:0 0 10px;font-size:17px}
+.panel p.desc{font-size:13px;color:#555;line-height:1.7;margin:6px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{border:2px solid var(--line);background:#f8faff;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit}
+.chip.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+select{padding:9px 10px;border-radius:10px;border:2px solid var(--line);font-size:14px;font-weight:700;font-family:inherit;background:#fff}
+.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer;font-size:14px;font-family:inherit}
+.btn-blue{background:var(--blue);color:#fff}.btn-green{background:var(--green);color:#fff}.btn-gray{background:#eee;color:#333}.btn-big{font-size:16px;padding:14px 20px;width:100%}
+.statbar{display:flex;gap:10px;margin:12px 0;flex-wrap:wrap}
+.stat{flex:1;min-width:110px;background:#f8faff;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.stat small{font-size:12px;color:var(--muted);display:block}.stat b{font-size:22px}
+.badge{font-size:12px;font-weight:900;border-radius:999px;padding:4px 10px;color:#fff}
+.badge.cat{background:var(--purple)}.badge.num{background:#111}
+#qtext{font-size:18px;font-weight:800;line-height:1.7;margin:8px 0 12px}
+.opt{display:block;width:100%;text-align:left;border:2px solid var(--line);background:#f8faff;border-radius:12px;padding:12px 14px;margin:8px 0;font-size:15px;font-weight:700;cursor:pointer;line-height:1.6;font-family:inherit}
+.opt:hover:not(:disabled){border-color:var(--blue);background:#fff}
+.opt:disabled{cursor:default}
+.opt.correct{background:#e8f5e9;border-color:var(--green)}
+.opt.wrong{background:#ffebee;border-color:var(--red)}
+.opt .letter{display:inline-flex;width:28px;height:28px;border-radius:50%;background:#111;color:#fff;align-items:center;justify-content:center;font-size:13px;margin-right:8px}
+.opt.correct .letter{background:var(--green)}.opt.wrong .letter{background:var(--red)}
+#explain{display:none;background:#fff8e1;border:1px solid #ffe082;border-radius:12px;padding:12px;font-size:14px;line-height:1.7;margin-top:10px}
+#explain.show{display:block}#explain b{color:#bf360c}
+.progress{height:8px;background:#e5e9f5;border-radius:999px;overflow:hidden;margin:6px 0}
+#progBar{height:100%;width:0;background:var(--blue);transition:width .3s}
+#timerWrap{height:10px;background:#e5e9f5;border-radius:999px;overflow:hidden;margin:8px 0 12px}
+#timerBar{height:100%;width:100%;background:linear-gradient(90deg,#16a34a,#f2a900,#dc2626);transition:width .2s linear}
+.review-item{border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0;font-size:14px;line-height:1.7}
+.review-item.ok{border-left:6px solid var(--green)}.review-item.ng{border-left:6px solid var(--red)}
+.hidden{display:none!important}
+#bigEmoji{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%) scale(.3);font-size:100px;z-index:9999;pointer-events:none;opacity:0}
+#bigEmoji.pop{animation:pop .9s ease-out forwards}
+@keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}55%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-90%) scale(1.1)}}
+body.shake main{animation:shake .5s}
+@keyframes shake{0%,100%{transform:translate(0)}25%{transform:translate(-8px,3px)}50%{transform:translate(7px,-5px)}75%{transform:translate(-4px,2px)}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">💪</div>
+<div><h1>CSCS 全書選擇題遊戲</h1><p>題目出自《CSCS書》Ch1–24｜解析標註書頁（如17-21表17.9）</p></div>
+<div class="spacer"></div>
+<div id="best" style="font-size:13px;font-weight:800">🏆 最佳：--</div>
+</header>
+<main>
+<div class="panel" id="setupPanel">
+<h2>🎮 開始挑戰</h2>
+<p class="desc">題庫共 <b id="totalQ">--</b> 題，全部對照《CSCS書》原文、表格與圖號設計，解析有書頁出處。選章節、選題數，答錯會顯示解析＋收錄到錯題複習。</p>
+<div class="chips" id="catChips"></div>
+<div class="row">
+<label>題數 <select id="qCount"><option value="10">10題快測</option><option value="20" selected>20題</option><option value="50">50題</option><option value="9999">全部</option></select></label>
+<label>⏱ 每題秒數 <select id="qTime"><option value="0">不限時</option><option value="30" selected>30秒</option><option value="15">15秒（刺激）</option></select></label>
+<label><input type="checkbox" id="shuffleOpt" checked> 選項亂序</label>
+</div>
+<div class="row"><button class="btn btn-blue btn-big" id="startBtn">▶ 開始作答</button></div>
+<p class="desc">📖 對照讀本：<b>CSCS重點總整理.pdf</b>（同資料夾）＋ <b>重點整理/</b> 章節筆記。建議先看速記卡再來玩。</p>
+</div>
+<div class="panel hidden" id="quizPanel">
+<div class="qmeta"><span class="badge num" id="qNum">Q1</span><span class="badge cat" id="qCat">分類</span><span style="flex:1"></span><span id="combo">🔥 連對 0</span></div>
+<div class="progress"><div id="progBar"></div></div>
+<div id="timerWrap"><div id="timerBar"></div></div>
+<div id="qtext"></div>
+<div id="opts"></div>
+<div id="explain"></div>
+<div class="row"><button class="btn btn-green btn-big hidden" id="nextBtn">下一題 →</button></div>
+<div class="statbar"><div class="stat"><small>得分</small><b id="stScore">0</b></div><div class="stat"><small>答對</small><b id="stRight">0</b></div><div class="stat"><small>答錯</small><b id="stWrong">0</b></div><div class="stat"><small>連對</small><b id="stStreak">0</b></div></div>
+<div class="row"><button class="btn btn-gray" id="quitBtn">✖ 結束本局</button></div>
+</div>
+<div class="panel hidden" id="resultPanel">
+<h2>🏁 成績單</h2>
+<div class="statbar"><div class="stat"><small>總分</small><b id="rScore">0</b></div><div class="stat"><small>答對率</small><b id="rRate">0%</b></div><div class="stat"><small>評價</small><b id="rGrade">--</b></div></div>
+<p class="desc" id="rComment"></p>
+<h2>📝 錯題＋複習（點選項看解析）</h2>
+<div id="review"></div>
+<div class="row"><button class="btn btn-blue" id="retryBtn">🔁 再玩一次</button><button class="btn btn-gray" id="homeBtn">🏠 回主選單</button></div>
+</div>
+</main>
+<div id="bigEmoji"></div>
+<script>
+/* 題庫格式：{c:分類, q:題目, o:[4選項], a:正解index(0-3), e:解析} */
+const QUESTIONS = [
+/*B1運動科學*/
+{c:"運動科學",q:"肌肉收縮時，下列哪個帶區長度不變？",o:["I-band","H-zone","A-band","Z線間距"],a:2,e:"肌凝蛋白長度不變，A-band不變；H-zone與I-band變短。"},
+{c:"運動科學",q:"能產生最大張力的肌肉動作型態是？",o:["向心收縮","等長收縮","離心收縮","等速收縮"],a:2,e:"離心約為向心的1.2–1.5倍，其次等長，最小是向心。"},
+{c:"運動科學",q:"阻力訓練初期（2–8週）力量進步主因是？",o:["肌纖維增粗","神經適應","骨密度增加","粒線體增生"],a:1,e:"初期為徵召↑、發放頻率↑、拮抗共縮↓；肥大是之後的事。"},
+{c:"運動科學",q:"運動單位徵召依循什麼原則？",o:["隨機原則","大小原則（慢縮→快縮）","反向原則（快縮先）","全有全無同時徵召"],a:1,e:"低強度先徵召慢縮單位，高強度才徵到快縮單位。（出處：第1章1-11）"},
+{c:"運動科學",q:"感受肌肉「被拉長速度」並引發牽張反射的是？",o:["高爾基腱器","肌梭","巴齊尼氏小體","關節受器"],a:1,e:"肌梭管長度變化；GTO管張力過大時抑制出力。"},
+{c:"運動科學",q:"下列哪種纖維最抗疲勞、有氧能力最高？",o:["IIb型（Type IIx）","IIa型","I型（慢縮）","三者相同"],a:2,e:"書1-10：I型＝慢縮肌纖維（slow-twitch），有效率、抗疲勞；快縮產生力量快、放鬆也快、抽動時間短。（出處：1-10）"},
+{c:"運動科學",q:"短跑、舉重選手通常哪型纖維比例較高？",o:["I型（慢縮）","IIa／IIb型（快縮）","平滑肌","心肌"],a:1,e:"爆發項目快縮纖維多；馬拉松則I型多。注意書中IIb型即Type IIx。（出處：1-10）"},
+{c:"運動科學",q:"書中「肌肉全有或全無原則」指的是？",o:["運動神經元受刺激只讓其支配的肌纖維收縮，動作電位再強也不會更強","肌肉一半收縮一半放鬆","只有早上會收縮","重量越重收縮越小"],a:0,e:"書1-10：全有或全無原則（all-or-none principle），抽動（twitch）由鈣離子釋放引發。（出處：1-10）"},
+{c:"運動科學",q:"書圖1.8中d所代表的是？",o:["單一抽動","兩個抽動加成","未融合性強直收縮","融合性強直收縮（tetanus）"],a:3,e:"a=抽動，b=兩個抽動加成（summation），c=未融合性，d=融合性強直收縮＝運動單位最大力量。（出處：圖1.8，1-10）"},
+{c:"運動科學",q:"書中提到人體骨骼約有多少塊？",o:["106塊","206塊","306塊","406塊"],a:1,e:"書第1章：人體約為206個骨骼，骨骼漸進承受負荷才會變強。（出處：第1章）"},
+{c:"運動科學",q:"肱二頭彎舉屬於第幾級槓桿？",o:["第1級","第2級","第3級","第4級"],a:2,e:"人體多為第3級，費力但速度快；踮腳尖為第2級最省力。"},
+{c:"運動科學",q:"力量-速度曲線的關係是？",o:["速度越快力量越大","速度越快力量越小","兩者無關","速度固定力量才變"],a:1,e:"向心收縮速度↑、能產生的力↓；功率在中段最大。"},
+{c:"運動科學",q:"增強式訓練利用的核心機制是？",o:["高爾基腱器抑制","牽張縮短循環SSC","交互抑制","倒U理論"],a:1,e:"離心預伸→過渡期越短越好→向心爆發，加上彈性位能。"},
+{c:"運動科學",q:"ATP-PC系統的主要供能時間約為？",o:["0–10秒","30秒–2分鐘","2–10分鐘","超過30分鐘"],a:0,e:"書3-13：短高強度活動（高強度阻力訓練、衝刺）主要仰賴磷化物與快速醣解系統；磷化物測驗需3–5分鐘完全恢復（12-10）。（出處：第3章3-13）"},
+{c:"運動科學",q:"400公尺跑、Wingate測驗主要依賴哪個系統？",o:["ATP-PC","快醣解系統","有氧氧化","三者均等"],a:1,e:"30秒–2分鐘高強度屬醣解，會產乳酸與H+。"},
+{c:"運動科學",q:"1.5英哩（2.4公里）跑、12分鐘跑主要測什麼能力？",o:["最大肌力","無氧功率","有氧耐力","敏捷"],a:2,e:"第七項有氧能力測驗；超過2–3分鐘以氧化（有氧）系統為主。（出處：12-10、第3章）"},
+{c:"運動科學",q:"下列哪組賀爾蒙屬於合成性（促進肌肉生長）？",o:["皮質醇、腎上腺素","睪固酮、GH、IGF-1","甲狀腺素、升糖素","胰高血糖素、皮質醇"],a:1,e:"合成促長，皮質醇為分解；大肌群多關節高強度刺激最大。"},
+{c:"運動科學",q:"長期熱量不足＋過量有氧，最可能出現？",o:["睪固酮↑皮質醇↓","睪固酮↓皮質醇↑","GH歸零","胰島素暴增"],a:1,e:"能量虧損＋壓力大，分解高於合成，表現掉、易病。"},
+{c:"運動科學",q:"有氧耐力訓練最明顯的中央適應是？",o:["肌纖維變粗","每跳輸出量SV↑、VO2max↑、安靜心率↓","骨密度暴增","無氧酵素暴增"],a:1,e:"心臟幫浦變強；無氧訓練對VO2max影響小。"},
+{c:"運動科學",q:"骨骼對阻力訓練的適應可用何定律解釋？",o:["Wolff定律（受力塑形）","牛頓第三定律","倒U定律","能量守恆"],a:0,e:"縱向壓力＋肌肉拉力促進骨生成，需漸進負荷。"},
+{c:"運動科學",q:"青少年肌力訓練最優先的目標是？",o:["測1RM拚最大重量","動作學習與多樣化","只練單關節","每天力竭"],a:1,e:"骨骺板未閉合前不測1RM，避免過早專項化與高壓。"},
+{c:"運動科學",q:"女運動員三合症／RED-S不包含下列何者？",o:["低能量可利用性","月經失調","骨密度下降","血壓飆高"],a:3,e:"吃不夠＋訓練量大→賀爾蒙亂＋骨質差，耐力女選手高風險。"},
+{c:"運動科學",q:"功率的定義是？",o:["力×速度","力÷時間","質量×身高","心率×血壓"],a:0,e:"爆發力＝又重又快，力量與速度都很重要。"},
+{c:"運動科學",q:"書17-17指出用多RM預測1RM，何時較準確？",o:["用20RM預測","負荷越重（≤10RM）越準；目標反覆6次就測6RM","用猜的","重量越輕越準"],a:1,e:"目標反覆次數（goal repetitions）：課表做六次臥推就測6RM；實施測驗數月前都用輕多RM者，預估也較準(8)。（出處：17-17）"},
+{c:"課表設計",q:"書17-19指出輔助動作的多RM測驗重量應？",o:["1RM天天測","等於或高於8RM，減輕關節結締組織壓力","越重越好","不用測"],a:1,e:"高反覆試舉疲勞降正確性；例：核心2RM但輔助最重只設8RM。訓練負荷以實測或估計1RM百分比計，或多RM決定（圖17.2）。（出處：17-19）"},
+{c:"課表設計",q:"書表17.3中，垂直跳的相關訓練動作不包含？",o:["抓舉、爆發上搏","後蹲舉、前蹲舉","站立比目魚肌抬高（腳跟）","仰臥起坐"],a:3,e:"表17-3（17-7）：垂直跳→抓舉/爆發上搏/瞬發推舉/前後蹲舉/比目魚肌抬高；跑步衝刺→抓舉/爆發上搏/前蹲/弓步/登階/腿伸直/腿捲屈/腳趾抬高。（出處：表17.3）"},
+{c:"運動科學",q:"肌腱與韌帶的訓練特性是？",o:["血流豐富適應超快","血流少、適應比肌肉慢，加量太快易肌腱病","完全不會適應","只靠拉筋變強"],a:1,e:"勁度↑有助爆發，但課表加量要漸進。"},
+{c:"運動科學",q:"同時練大量長跑＋最大肌力，最可能發生？",o:["干擾效應，爆發進步打折","兩者都加倍進步","完全沒影響","只影響柔軟度"],a:0,e:"建議分開時段或用週期分開強調重點。"},
+/*B2心理營養測驗*/
+{c:"心理",q:"對長期維持訓練最有利的動機是？",o:["獎金","名次","內在動機（樂趣、成長）","怕被罵"],a:2,e:"內在比外在持久，外在獎勵拿掉行為易消失。"},
+{c:"心理",q:"喚醒與表現最常考的理論是？",o:["倒U型（適中最好）","越高越好","越低越好","與表現無關"],a:0,e:"太緊張或太鬆都差；IZOF則說每人最佳區不同。"},
+{c:"心理",q:"最能由選手自己控制的目標類型是？",o:["結果目標（奪冠）","裁判給分","過程目標（動作、呼吸）","對手失誤"],a:2,e:"過程目標最可控，配SMARTS設定最有效。"},
+{c:"心理",q:"比賽前在腦中預演動作屬於哪種技巧？",o:["意象imagery","體重控制","按摩","冰敷"],a:0,e:"搭配自我對話、呼吸放鬆、注意力控制使用。"},
+{c:"心理",q:"選手出現憂鬱、飲食失調徵兆，CSCS應？",o:["自行診斷開藥","辨識＋轉介專業，不做治療","叫他硬撐","退隊處分"],a:1,e:"超出執業範圍就轉介心理／醫療專業。"},
+{c:"營養",q:"三大營養素每克熱量正確的是？",o:["醣4、蛋白4、脂肪9、酒精7","醣9、蛋白4、脂肪4","醣4、蛋白9、脂肪4","三者都是4"],a:0,e:"脂肪最高，酒精7，常考計算題。"},
+{c:"營養",q:"一般肌力訓練者每日醣類建議約？",o:["1–2g/kg","5–7g/kg","15g/kg","不用吃醣"],a:1,e:"耐力選手7–10g/kg；吃不夠先掉表現。"},
+{c:"營養",q:"肌力增肌者每日蛋白建議約？",o:["0.5g/kg","1.2–2.0g/kg","5g/kg","越少越好"],a:1,e:"常考1.6g/kg左右；減重期更要吃夠＋保阻力訓練。"},
+{c:"營養",q:"脂肪占總熱量建議範圍是？",o:["5%以下","20–35%","60–70%","100%"],a:1,e:"低於20%易影響賀爾蒙與脂溶性維生素。"},
+{c:"營養",q:"脫水達體重多少時，運動表現明顯下降？",o:["0.1%","超過2%","10%才會","脫水不影響"],a:1,e:"賽前2–3hr喝500ml，運動中每15–20分補150–250ml。"},
+{c:"營養",q:"比賽超過60–90分鐘，賽中每小時應補充？",o:["只喝純水不吃東西","30–60g醣＋水＋電解質","只吃蛋白","禁食禁水"],a:1,e:"長時間要補醣延緩疲勞＋補鈉水平衡。"},
+{c:"營養",q:"賽後促進恢復的飲食原則是？",o:["儘快補醣＋蛋白（約3:1或4:1）","只吃炸雞","24小時不吃","只喝酒"],a:0,e:"增肌期每日多300–500kcal，每週增0.25–0.5kg最安全。"},
+{c:"營養",q:"目前對力量表現證據最充分的合法補劑是？",o:["肌酸","來路不明草藥","酒精","反式脂肪"],a:0,e:"肌酸＋咖啡因證據較多；其他先懷疑＋認第三方檢驗。"},
+{c:"營養",q:"購買補劑降低污染風險應認明？",o:["網紅推薦","NSF Certified for Sport等第三方檢驗","越便宜越好","包裝好看"],a:1,e:"標示不實與污染是主因，選手要自保。"},
+{c:"營養",q:"下列屬於WADA禁藥的是？",o:["肌酸","咖啡（適量）","同化類固醇AAS、EPO","香蕉"],a:2,e:"AAS、GH、EPO、利尿劑等禁，CSCS負責衛教不慫恿。"},
+{c:"測驗評估",q:"書12-10測驗順序，前三項依序是？",o:["有氧→無氧→肌力","非疲勞性→敏捷性→最大爆發力和肌力","速度→平衡→柔軟度","隨便排都可以"],a:1,e:"書12-10完整七項：非疲勞性（身高體重柔軟度皮脂體圍垂直跳）→敏捷性（T字型、折返）→最大爆發力和肌力（1RM爆發上搏、深蹲）→衝刺→局部肌耐力→疲勞性無氧→有氧。（出處：12-10）"},
+{c:"測驗評估",q:"書中疲勞性無氧能力與有氧能力測驗的例子是？",o:["垂直跳＋握力","300碼（275公尺）來回跑＋1.5英哩（2.4公里）或YoYo","坐姿體前彎＋血壓","視力＋聽力"],a:1,e:"兩者排最後，盡量不同天；同一天則延長休息。300碼書中另處作274公尺（12-11）。（出處：12-10）"},
+{c:"測驗評估",q:"書中磷化物與無氧醣解測驗完全恢復各需多久？",o:["都只要10秒","磷化物3–5分鐘、無氧醣解最大測驗至少一小時","都要一個月","不用恢復"],a:1,e:"書12-10：磷化物(5,9)、無氧醣解(7)；系列測驗（test battery）間隔至少5分鐘。（出處：12-10）"},
+{c:"測驗評估",q:"測最大肌力最適合的測驗是？",o:["1RM深蹲／臥推","12分跑","坐姿體前彎","血壓"],a:0,e:"要有標準暖身、漸增、護槓，3–5次試舉找到1RM。"},
+{c:"測驗評估",q:"測下肢爆發最適合的是？",o:["垂直跳","皮脂夾","靜態拉筋","視力"],a:0,e:"跳躍屬非疲勞性，放測驗最前面。"},
+{c:"測驗評估",q:"測敏捷最常用的是？",o:["T字型測驗、折返敏捷性測驗","1.5英哩跑","握力","肺活量"],a:0,e:"書12-10第二項即敏捷性測驗（T字型、折返）；高技巧測驗要在疲勞前做。（出處：12-10）"},
+{c:"測驗評估",q:"測無氧能力代表是？",o:["垂直跳、握力","300碼（275公尺）來回跑","身高體重","血型"],a:1,e:"疲勞性無氧排第六、有氧排第七；書例：300碼來回跑、1.5英哩（2.4公里）或YoYo間歇恢復測驗。（出處：12-10）"},
+{c:"測驗評估",q:"效度validity的意思是？",o:["重測會一致","測到你想測的東西","器材很貴","受測者很累"],a:1,e:"書12-2：效度＋信度是測驗品質核心；信度是重測一致，熱身可改善信度(2)。（出處：12-2、12-11）"},
+{c:"測驗評估",q:"書13-34中，百分等級75%代表？",o:["考了75分","整體中約75%的人成績低於該運動員","前75名","標準差75"],a:1,e:"百分等級（percentile rank）＝勝過人數百分比；計算先由小至大排列。圖13.21鐘型曲線3%-13%-68%-13%-3%。（出處：13-33～13-34）"},
+{c:"測驗評估",q:"書中z分數公式13.2是？",o:["z=(x−x̄)/SD","z=x×SD","z=SD−x","z=x̄＋SD"],a:0,e:"書例：40碼（37公尺）4.6秒，平均5秒，z=-1.2即低於平均1.2個標準差。SD公式13.1用n-1。（出處：13-34）"},
+{c:"測驗評估",q:"出現兩次或更多相同數字連在一起稱為？",o:["平均數","眾數","中位數","標準差"],a:1,e:"書13-33：眾數通常不用來代表整體中央趨勢；變異性（variability）看區間（range）與標準差。（出處：13-33～13-34）"},
+/*B3技術課表*/
+{c:"動作技術",q:"訓練前熱身的正確安排是？",o:["長時間靜態拉筋＋測1RM","動態伸展＋專項動作（一般＋特定熱身）","完全不熱身","只做按摩"],a:1,e:"書12-11：熱身可改善測驗信度，由一般＋特定熱身組成，含與動作相似的身體動作。靜態放訓練後。（出處：12-11）"},
+{c:"動作技術",q:"深蹲最常見的錯誤是？",o:["膝內夾valgus、腳跟離地、圓背","呼吸太順暢","重量太輕","穿新鞋"],a:0,e:"膝對腳尖、腳跟貼地、軀幹中立是影片題重點。"},
+{c:"動作技術",q:"臥推的正確要求是？",o:["屁股離墊拱腰推大重量","5點接觸、屁股不離墊、槓下胸中線","槓只下到一半","閉氣到暈倒"],a:1,e:"頭肩臀＋雙腳貼地，護槓站頭後方。"},
+{c:"動作技術",q:"硬舉最重要的是？",o:["圓背拉起","髖鉸鏈、槓貼腿、背中立","只用手臂拉","越快越好不看姿勢"],a:1,e:"圓背是影片題最愛考的錯誤。"},
+{c:"動作技術",q:"書15-5指出護槓員人數主要取決於？",o:["選手的星座","欲舉起的負荷、雙方經驗能力、護槓員肌力","健身房音樂","當天星期幾"],a:1,e:"負荷越重受傷機率越高，超過能力就加一位；能輕鬆掌控一位就夠，人多反而錯機率增。（出處：15-5）"},
+{c:"動作技術",q:"書中哪類動作明確不需要護槓輔助？",o:["深蹲","臥推","爆發力動作","二頭彎舉"],a:2,e:"書15-5（三）勿輔助爆發力動作；改教失控擺脫：前方失控向前推槓或落下，頭後方失控立刻鬆槓向前跳，周邊先淨空。（出處：15-5）"},
+{c:"動作技術",q:"啞鈴動作正確的輔助位置是？",o:["上臂或手肘","接近手腕處","脖子","膝蓋"],a:1,e:"書15-5圖15.3：放上臂/手肘，手肘「崩潰」屈曲時擋不住啞鈴砸臉胸；但啞鈴上拉、過頭三頭伸展要直接抓握啞鈴。（出處：15-5）"},
+{c:"動作技術",q:"書15-7中，運動員力竭時應對護槓員說什麼？",o:["明天見","「拿掉它」或事前協商好的措辭","唱歌","沉默"],a:1,e:"通過忍受點（sticking point）需足夠協助；要求或示意後護槓員給剛好的量，取槓要快而順。（出處：15-7）"},
+{c:"動作技術",q:"大重量呼吸策略是？",o:["全程憋氣不呼吸","Valsalva繃緊核心、向心吐氣","大笑","用嘴 whistle"],a:1,e:"離心吸、向心吐是通則，大重量用Valsalva穩定軀幹。"},
+{c:"動作技術",q:"Power Clean第二次拉（second pull）的關鍵是？",o:["手臂先彎舉","踝膝髖三關節伸triple extension","蹲著不動","閉眼睛"],a:1,e:"五段：起始→一拉→過渡scoop→二拉→接槓，接槓手肘要快。"},
+{c:"動作技術",q:"壺鈴擺盪主要靠？",o:["深蹲","髖鉸鏈＋背中立","手腕甩","駝背"],a:1,e:"靠髖爆發不是蹲，背不圓是重點。（出處：第16章壺鈴訓練16-12）"},
+{c:"動作技術",q:"書16-8阻力帶虎克定律公式是？",o:["張力＝硬度（k）×形變（d）","張力＝體重×身高","張力固定不變","張力＝年齡"],a:0,e:"帶體延展形變加劇，張力線性增加；同款兩條帶差異3.2–5.2%，張力誤差達8–19%。Baker算法：150公斤5RM，頂點26.6公斤→槓鈴減13.3公斤。（出處：16-8）"},
+{c:"動作技術",q:"書16.5抗力球屈體（折疊刀）主要肌群是？",o:["股四頭","腹直肌與髂腰肌","胸大肌","小腿"],a:1,e:"跪球前背對球、四點支撐、等長撐軀幹、手肘全伸、頭中立；滾球至髖膝全屈。（出處：16-19）"},
+{c:"動作技術",q:"書15.40爆發抓舉槓距脛骨前約？",o:["1英吋（3公分）","1公尺","10公分","貼著脖子"],a:0,e:"握寬測量：拳到反肩或手肘到手肘；雙腳臀肩寬間、正握（有力用勾握）、手肘全伸指向外側。（出處：15-56）"},
+{c:"課表設計",q:"需求分析不包含？",o:["動作分析","能量系統與傷病分析","運動員現況","看星座"],a:3,e:"動作＋生理＋現況，才能選動作定強度。"},
+{c:"課表設計",q:"一次訓練的動作順序應為？",o:["耐力→肥大→肌力→爆發","爆發→大肌群多關節→小肌群→核心耐力","小→大→爆發","隨機"],a:1,e:"先做需要神經 fresh 的爆發與大重量。"},
+{c:"課表設計",q:"書表17.9中，最大肌力目標的負荷是？",o:["≤67%、≥12下","67–85%、6–12下","≥85%、≤6下（只適用核心動作）","自體重、休5秒"],a:2,e:"表17.9（17-21）：肌力≥85/≤6；一次性爆發80~90/1~2；多次性75~85/3~5；肥大67~85/6~12；耐力≤67/≥12。肌力設定只適用核心，輔助限8RM。（出處：表17.9）"},
+{c:"課表設計",q:"書表17.9中，肌肉肥大目標的負荷是？",o:["≥90%、1下","67–85%、6–12下（休30秒至1.5分）","每天只練腹肌","不休息"],a:1,e:"表17.12（17-29）：肥大休30秒至1.5分；肌力與爆發休2~5分；耐力≤30秒。（出處：表17.9、表17.12）"},
+{c:"課表設計",q:"書表17.9中，肌耐力與多次性爆發力負荷是？",o:["耐力≥85%、爆發30%","耐力≤67%≥12下、多次爆發75~85%做3~5下","1RM天天測","只練脖子"],a:1,e:"耐力輕多休短（≤30秒）；爆發單次80~90做1~2下、多次75~85做3~5下，都休2~5分。（出處：表17.9、表17.12）"},
+{c:"課表設計",q:"書表17.8中，10RM約等於多少%1RM？",o:["100%","95%","75%","50%"],a:2,e:"表17.8（17-19）：1:100、2:95、3:93、4:90、5:87、6:85、7:83、8:80、9:77、10:75、12:67、15:65。書例：10RM300磅→1RM400磅。（出處：表17.8）"},
+{c:"課表設計",q:"書17-20例：臥推1RM220磅（100公斤），肌力目標做6下至少用？",o:["50磅","至少85%1RM（約187磅）","空槓","500磅"],a:1,e:"肌力做六次需至少85%1RM；若只做四次則接近90%（表17.7）約200磅（90公斤）。（出處：17-20）"},
+{c:"課表設計",q:"書圖17.1的1RM測驗流程，加重規則是？",o:["每次都加100磅","上身加10~20磅（4~9公斤）或5~10%、下身加30~40磅（14~18公斤）或10~20%，五次內測出","只做一次","用猜的"],a:1,e:"流程：5~10下熱身→休1分→3~5下→休2分→2~3下→休2~4分→1RM嘗試；成功加重、失敗減重（上身5~10磅/2.5~5%、下身15~20磅/5~10%）。（出處：圖17.1，17-17）"},
+{c:"課表設計",q:"書17-7指出肌肉平衡（muscle balance）的意思是？",o:["左右肌力完全相等","某一肌肉與另一肌肉相比具有適當比例，而非相等","越壯越好","不用管拮抗肌"],a:1,e:"例：等速測出腿後弱於股四頭就加練腿後；作用肌agonist（如伸膝股四頭）vs拮抗肌antagonist（腿後）。跳躍首選後蹲舉，時間有限首選爆發上搏(97)。（出處：17-7）"},
+{c:"課表設計",q:"書17-21指出單關節最大爆發力發生在？",o:["100%1RM","30%1RM的輕重量","完全不用重量","越重越好"],a:1,e:"但太輕難做多關節（末端需減速控橫槓）；多關節爆發用表17.9，約80%1RM≈2~5次範圍。（出處：17-21）"},
+{c:"課表設計",q:"新手每週增負荷的安全幅度約？",o:["每週加100%","2.5–10%","每週減半","一次加50kg"],a:1,e:"先加量→加強度→加複雜度，漸進才長久。"},
+{c:"課表設計",q:"增強式訓練初學者每節觸地數約？",o:["1000下","80–100","500下","越多越好"],a:1,e:"中階100–120、高階120–140+，組間1:5–1:10、隔48hr。"},
+{c:"課表設計",q:"增強式訓練的時機是？",o:["疲勞最後做","不疲勞時做，落地先學好","受傷照跳","每天跳"],a:1,e:"先會安靜落地（膝對腳尖），觸地越短越好。"},
+{c:"課表設計",q:"40碼（37公尺）衝刺主要練什麼？",o:["加速與最大速度","柔軟度","握力","視力"],a:0,e:"書12-10第四項即衝刺測驗（40公尺分段計時10公尺與20公尺）；13-34例：40碼＝37公尺。（出處：12-10、13-34）"},
+{c:"課表設計",q:"敏捷訓練最該強調的是？",o:["只練直線跑","減速與變向（重心低、外側腿煞車）","穿拖鞋練","閉眼跑"],a:1,e:"會煞車才防傷，敏捷＝變向＋認知。"},
+{c:"課表設計",q:"估算目標心率最常用？",o:["Karvonen公式","星座運勢","體重×2","隨便抓"],a:0,e:"[(HRmax–HRrest)×%]+HRrest，有氧強度 managemant 用。"},
+/*B4週期復健設施*/
+{c:"週期化",q:"線性週期最適合？",o:["新手（量↓強度↑、好懂）","奧運前一週","受傷急性期","完全不訓練"],a:0,e:"新手線性、中高階波動、拚高峰用區塊。"},
+{c:"週期化",q:"在賽季中維持表現最常用？",o:["每天測1RM","波動週期（日／週波動）","完全停練","只練手指"],a:1,e:"波動可兼顧疲勞與維持，頻率約2x、量低。"},
+{c:"週期化",q:"區塊週期的典型順序是？",o:["專項→肥大→肌力","肥大→肌力→爆發→專項","爆發→肥大","隨機"],a:1,e:"先打底、再變壯、再變快、最後轉專項高峰。"},
+{c:"週期化",q:"賽前減量deload的做法是？",o:["量-40–60%、強度維持、睡好吃好","加量兩倍","熬夜","禁食"],a:0,e:"賽前1–2週減量，讓疲勞消、體能顯現。"},
+{c:"週期化",q:"過度訓練的徵兆不包含？",o:["表現掉、疲勞、情緒差","靜息心率↑、易生病","每天都破PR精神超好","睡不好"],a:2,e:"看到前兩項先減量睡覺，不硬撐。"},
+{c:"復健",q:"CSCS在復健團隊的角色是？",o:["單獨診斷開刀","與醫師PT防護員合作，不單獨診斷","賣藥","算命"],a:1,e:"急性先POLICE＋保護，漸進回活動度→肌力→爆發→專項。"},
+{c:"復健",q:"重返賽場的肌力標準常為？",o:["患側>對側90%＋功能測驗過","會走路就好","腫著也能打","不用標準"],a:0,e:"腫痛控＋活動度對稱＋心理準備好，缺一不可。"},
+{c:"設施管理",q:"訓練場館主通道寬度至少？",o:["10公分","36吋（約91cm）","1公分","越窄越好"],a:1,e:"力量架間距要夠上下槓片，動線不交叉。"},
+{c:"設施管理",q:"大學訓練室師生比建議約？",o:["1:100","1:20（高中1:15、國中1:10）","1:1000","不用監督"],a:1,e:"監督要能看到全場，比例越小越安全。"},
+{c:"設施管理",q:"場館必備文件不包含？",o:["EAP緊急計畫","器材保養紀錄","健康問卷PAR-Q、CPR證照","午餐菜單"],a:3,e:"免責同意書＋EAP＋保養紀錄是法律題重點。"},
+{c:"設施管理",q:"教練疏失negligence四要件是？",o:["Duty-Breach-Causation-Damage","吃喝玩樂","更高更快更壯","免責就好"],a:0,e:"有義務→違反→因果→損害，記英文縮寫。"},
+{c:"設施管理",q:"CSCS的執業範圍應？",o:["幫選手診斷開藥","不做醫療診斷、不開營養處方，疑慮轉介","做徒手治療","什麼都保證"],a:1,e:"不越界是考題陷阱，記「辨識＋轉介」。"},
+{c:"設施管理",q:"報考與執業都必須有效的證照是？",o:["駕照","CPR＋AED","潛水證","廚師證"],a:1,e:"急救＋EAP是保護選手的第一線。"},
+{c:"課表設計",q:"上肢交替上下肢、推拉交替的主要目的是？",o:["省時＋兼顧恢復","炫技","增加受傷","沒意義"],a:0,e:"拮抗肌交替可維持品質又省時間。"},
+{c:"課表設計",q:"高階分部訓練每週約練幾天？",o:["1天","5–6天分部","每天24小時","一個月1次"],a:1,e:"新手全身2–3天、中階上下3–4天、高階分部5–6天。"},
+{c:"運動科學",q:"肌節的基本單位範圍是？",o:["Z線到Z線","A線到A線","肌腱到韌帶","骨頭到骨頭"],a:0,e:"肌節=Z線間，收縮時Z線靠近。"},
+{c:"運動科學",q:"慢縮肌纖維的主要能量供應方式是？",o:["醣解","氧化（有氧）","完全不用能量","只靠肌酸"],a:1,e:"Type I粒線體多、微血管多，靠有氧。"},
+{c:"運動科學",q:"高爾基腱器（GTO）的主要功能是？",o:["感受長度促進收縮","張力過大時抑制出力以保護","感受顏色","分泌賀爾蒙"],a:1,e:"與肌梭互補，一個催油門、一個踩煞車。"},
+{c:"運動科學",q:"骨骼肌增大的主要方式是？",o:["細胞分裂增生","纖維增粗（肥大）","骨頭變長","脂肪堆積"],a:1,e:"肌纖維數量大致固定，練壯是變粗＋並聯肌小節增加。"},
+{c:"運動科學",q:"長期阻力訓練後，IIx纖維最可能？",o:["消失不見","往IIa方向轉移","變成心肌","變成骨頭"],a:1,e:"訓練使快纖維特性往中間靠，爆發＋耐力兼顧。"},
+{c:"運動科學",q:"心輸出量Q的公式是？",o:["心率×每跳輸出量","體重×身高","血壓＋血糖","肺活量÷體重"],a:0,e:"Q=HR×SV，訓練後SV上升是關鍵。"},
+{c:"運動科學",q:"最大攝氧量VO2max主要反映？",o:["最大肌力","心肺有氧能力","柔軟度","平衡感"],a:1,e:"中央＋周邊適應的總和，耐力選手最看重。"},
+{c:"運動科學",q:"阻力運動時血壓變化的主因是？",o:["Valsalva＋肌肉壓迫血管","喝水太多","想太多","鞋子太緊"],a:0,e:"大重量閉氣用力血壓飆高，高血壓族群要特別監控。"},
+{c:"運動科學",q:"生長激素GH分泌最多的運動型態是？",o:["低強度散步","高強度多關節大肌群＋短休息","靜坐","睡覺不動"],a:1,e:"強度高、量大、休息短，乳酸堆積刺激GH。"},
+{c:"運動科學",q:"睪固酮對阻力訓練的反應是？",o:["完全沒反應","大肌群高強度後急性上升","只在睡覺上升","只下降"],a:1,e:"急性上升不等於長期保證，但課表方向正確。"},
+{c:"心理",q:"目標設定SMART原則中的M是指？",o:["模糊的","可測量的Measurable","神祕的","隨便的"],a:1,e:"具體、可測、可達成、相關、有時限＋自我決定的S。"},
+{c:"心理",q:"注意力「外在＋寬」適合什麼時機？",o:["罰球瞄準","快攻觀察全場跑位","舉重鎖定單一動作","睡覺"],a:1,e:"寬外看全場、窄外鎖目標、寬內想戰術、窄內控呼吸。"},
+{c:"心理",q:"自我對話（self-talk）的主要用途是？",o:["跟對手吵架","提示動作＋調節喚醒和信心","背誦課文","唱歌"],a:1,e:"關鍵字提示＋正向語句，比賽最實用。"},
+{c:"心理",q:"團隊凝聚力對表現的影響是？",o:["完全無關","凝聚力高通常表現較好","越分裂越好","只影響教練"],a:1,e:"教練溝通＋角色明確＋共同目標是凝聚關鍵。"},
+{c:"營養",q:"賽前醣原負荷（肝醣超補）適合？",o:["10分鐘的比賽","超過90分鐘的耐力賽","睡覺","打電動"],a:1,e:"賽前幾天高醣＋減量，馬拉松鐵人常用。"},
+{c:"營養",q:"減重期每週安全的體重下降速度是？",o:["5–10kg","0.25–0.5kg","10kg以上","越快越好"],a:1,e:"太快掉肌肉＋賀爾蒙亂，保蛋白＋保重訓。"},
+{c:"營養",q:"增肌期每日熱量盈餘建議約？",o:["+300–500kcal","＋5000kcal","－1000kcal","不吃"],a:0,e:"小盈餘＋漸進超負荷，太多只胖脂肪。"},
+{c:"營養",q:"女性耐力選手最易缺乏的營養素是？",o:["鐵、鈣、維生素D","純糖","反式脂肪","酒精"],a:0,e:"經血＋高訓練量＋吃不夠，三者疊加最危險。"},
+{c:"營養",q:"咖啡因對運動表現的作用是？",o:["降低專注","中樞刺激、延緩疲勞、提升耐力","讓人想睡","增加脫水到危險"],a:1,e:"適量有效，過量心悸焦慮；比賽前要試過再用。"},
+{c:"營養",q:"Beta-alanine主要幫助？",o:["1–4分鐘高強度緩衝H+","增加身高","治療感冒","長頭髮"],a:0,e:"緩衝酸性、延緩疲勞，常見刺痛感屬正常。"},
+{c:"測驗評估",q:"皮脂夾測量要可靠，最重要的是？",o:["同一人、同一位置、轉圈測三次取平均","每天換人測","只測一次","用尺亂量"],a:0,e:"標準化＋熟悉＋同一時段，數據才能比。"},
+{c:"測驗評估",q:"1RM測驗前，受測者應？",o:["直接上最大重量","標準暖身＋漸增＋充分休息","先跑10公里","熬夜"],a:1,e:"暖身→輕→中→重，3–5次試舉，老手才測真1RM。"},
+{c:"測驗評估",q:"垂直跳測驗時，手臂動作應？",o:["每次不同","標準化（固定擺臂或叉腰）","拉單槓","抱頭"],a:1,e:"條件一致才能比，雙手叉腰可排除擺臂差異。"},
+{c:"測驗評估",q:"300碼（275公尺）折返跑測的是？",o:["柔軟度","疲勞性無氧能力＋折返能力","視力","聽力"],a:1,e:"第六項；高乳酸＋多次變向，排在有氧之前，兩者盡量不同天。（出處：12-10）"},
+{c:"動作技術",q:"書中指出能改善測驗信度的做法是？",o:["測驗前做一般＋特定熱身","完全不熱身","熬夜","禁食"],a:0,e:"書12-11：信度會因測驗前熱身而改善(2)；熱身中做2–3個接近測驗動作＋試做，之後才計分。（出處：12-11）"},
+{c:"動作技術",q:"PNF伸展的最佳使用時機是？",o:["最大肌力測驗前立即做","訓練後或獨立柔軟度時段","比賽槍響前1秒","受傷腫脹時硬拉"],a:1,e:"hold-relax效果好，但賽前長時間靜態會暫降力。"},
+{c:"動作技術",q:"肩推時最常見的代償是？",o:["腰椎超伸、聳肩","呼吸太順","重量太輕","鞋帶鬆掉"],a:0,e:"肋骨下壓、肩胛穩定、手腕中立是關鍵。"},
+{c:"動作技術",q:"藥球投擲訓練的重點是？",o:["只用手腕","全身動力鏈傳導（腿→髖→軀幹→手）","閉氣不動","坐著滑手機"],a:1,e:"爆發傳導＋注意牆面距離和接球安全。"},
+{c:"動作技術",q:"農夫走行（Farmer's walk）主要練？",o:["握力＋核心＋全身穩定","只有小腿","只有脖子","視力"],a:0,e:"不聳肩、不側彎，重量漸進，握不住就降。"},
+{c:"課表設計",q:"同一肌群高強度訓練後，一般需恢復？",o:["0小時","48小時左右","1年","10年"],a:1,e:"大重量＋離心多更久；睡眠營養是恢復主力。"},
+{c:"課表設計",q:"肌力課表組間休息不足會？",o:["完全沒差","磷化物系統恢復不來、後面組數品質崩","變得更壯","變聰明"],a:1,e:"想拚重量就休2–5分（表17.12，17-29）；想代謝壓力才休短。（出處：第17章17-29）"},
+{c:"課表設計",q:"寫課表時「訓練量」通常指？",o:["組數×次數×重量","流了多少汗","練了幾小時","喝了多少水"],a:0,e:"Volume-load是監控疲勞的核心數字。"},
+{c:"課表設計",q:"速度訓練的休息應？",o:["完全恢復再跑（品質優先）","喘就好直接衝","邊跑邊滑手機","跑到吐"],a:0,e:"神經疲勞沒恢復，越跑越慢＋動作跑掉。"},
+{c:"課表設計",q:"HIIT的 work:rest 常見比例是？",o:["1:10以上","1:1到1:3（看目標）","1:100","不用休息"],a:1,e:"磷化物取向休久、醣解取向休短，目標決定比例；磷化物完全恢復要3–5分鐘（12-10）。（出處：第3章3-13）"},
+{c:"週期化",q:"中週期mesocycle一般長度是？",o:["1天","4–12週","10年","1小時"],a:1,e:"大（年）→中（月）→微（週），層層堆疊。"},
+{c:"復健",q:"急性傷害處置POLICE中的L是指？",o:["笑","適當負荷Optimal Loading","離開","冷漠"],a:1,e:"保護＋適當負荷＋冰敷壓迫抬高，取代完全不動的RICE舊觀。"},
+{c:"設施管理",q:"鏡子安裝高度建議？",o:["貼天花板","離地約20吋（看全身動作）","埋在地板","不用鏡子"],a:1,e:"能看到全身動作品質，又不影響安全動線。"},
+{c:"設施管理",q:"槓鈴、啞鈴保養的重點是？",o:["從不檢查","定期檢查鎖扣、滾花、插銷並記錄","泡水","摔著玩"],a:1,e:"保養紀錄是法律攻防的關鍵證據。"},
+{c:"營養",q:"肌酸最常見的正確補充認知是？",o:["吃一次就永久有效","需規律補充＋配水，對高強度間歇有幫助","會傷腎（健康人正常量無證據）亂傳","吃越多越壯無上限"],a:1,e:"健康人正常劑量＋多喝水，效果在反覆爆發最明顯。"},
+{c:"課表設計",q:"深蹲、硬舉、臥推屬於？",o:["單關節小肌群","多關節大肌群（優先排前面）","有氧動作","伸展動作"],a:1,e:"多關節轉移高＋賀爾蒙反應大，課表核心。"},
+{c:"課表設計",q:"核心訓練在一次訓練中通常排？",o:["最前面","最後面（避免先疲勞影響大動作）","不練","只練腹肌"],a:1,e:"核心先累，大重量深蹲的穩定就崩了。"},
+{c:"課表設計",q:"漸進性超負荷的第一步通常是？",o:["直接加50kg","先加量（組數次數）再加強度","換健身房","換衣服"],a:1,e:"量→強度→複雜度，關節和肌腱才跟得上。"},
+{c:"測驗評估",q:"追蹤同一選手進步，最重要的是？",o:["每次換不同測驗","同一條件、同一測驗、同一時段","請不同人測","看心情"],a:1,e:"標準化是數據唯一的意義，否則只是數字。"},
+{c:"測驗評估",q:"坐姿藥球投擲測的是？",o:["上肢爆發力","下肢肌力","有氧","柔軟度"],a:0,e:"非疲勞性，放測驗前段，與垂直跳呼應。"},
+{c:"動作技術",q:"羅馬尼亞硬舉與傳統硬舉最大的差別是？",o:["RDL膝微彎、重髖鉸鏈離心控制，槓不落地","完全一樣","RDL用脖子拉","RDL要圓背"],a:0,e:"RDL練腿後離心＋髖鉸鏈，是防傷神器。"},
+{c:"動作技術",q:"引體向上拉不上去，第一步退階是？",o:["直接放棄","彈力帶輔助／跳躍式＋慢速離心","每天硬扯","只練二頭彎舉"],a:1,e:"退階保動作品質，再漸進到自體重＋負重。"},
+{c:"動作技術",q:"雪橇推（sled push）阻力設定練加速約？",o:["體重的10%以內","體重的500%","越重越好推不動","不用重量"],a:0,e:"太重動作跑掉變成純肌力，速度課表要保速度。"},
+{c:"週期化",q:"休賽季off-season的訓練重點是？",o:["維持就好","打底：量大、強度漸進、補弱項","完全不練","每天比賽"],a:1,e:"底打多寬，季前才能堆多高。"},
+{c:"週期化",q:"賽季中in-season的頻率建議約？",o:["每天兩練","每週2次維持、量低","完全停訓","每月1次"],a:1,e:"目標是別掉＋別累，留體力給比賽。"},
+{c:"復健",q:"受傷後還能練的部位應？",o:["全身停練","練能練的，維持體能不崩","受傷也硬練患部","退休"],a:1,e:"練好的＋改動作避痛點，回場更快。"},
+{c:"復健",q:"回場功能性測驗的意義是？",o:["做辛酸的","確認專項動作品質＋雙側對稱","測視力","湊時數"],a:1,e:"跳、切、煞車都要過，+心理準備好才放行。"},
+{c:"設施管理",q:"力量架（power rack）最重要的安全配件是？",o:["音響","安全插銷safety pins","霓虹燈","香氛"],a:1,e:"插銷高度調好，深蹲臥推失敗能自救。"},
+{c:"設施管理",q:"發現器材損壞，第一步是？",o:["假裝沒看到","標示停用＋通報＋記錄","叫選手小心點","丟掉"],a:1,e:"標示→通報→維修→記錄，流程完整才免責。"},
+{c:"運動科學",q:"最大心率最常用的估計公式是？",o:["220－年齡","年齡×體重","100＋身高","隨便猜"],a:0,e:"粗估用，精準要用實測＋Karvonen配強度。"},
+{c:"運動科學",q:"V02max的單位是？",o:["kg","ml/kg/min","cm","dB"],a:1,e:"每公斤每分鐘用多少氧，數字越高有氧越強。"},
+{c:"營養",q:"賽前1–4小時的醣類建議約？",o:["1–4g/kg、低脂低纖維、吃熟悉的食物","10g/kg＋炸雞","禁食","只喝酒"],a:0,e:"吃錯＋腸胃鬧事，比賽直接報銷。"},
+{c:"心理",q:"比賽失常後，最好的目標重設是？",o:["發誓下次一定要奪冠","回到過程目標（呼吸、節奏、動作）","怪隊友","摔拍子"],a:1,e:"結果不可控，過程可控，先穩住能做的。"},
+{c:"課表設計",q:"推拉平衡（push-pull）的主要目的？",o:["好看","避免肌力失衡＋圓肩＋受傷","省錢","流行"],a:1,e:"臥推多＋划船少＝圓肩＋肩夾擠，比例至少1:1。"},
+{c:"課表設計",q:"同一次訓練排「深蹲＋腿屈伸」，順序是？",o:["腿屈伸先","深蹲（大肌群多關節）先","隨便","都不做"],a:1,e:"大→小是鐵律，除非復健有特殊目的（預疲勞法例外）。"},
+{c:"測驗評估",q:"40碼（37公尺）衝刺測驗前應？",o:["充分熱身＋熟悉起跑（測前1–3天監督練習）","剛吃飽就跑","穿拖鞋","先跑5公里"],a:0,e:"書12-10：測驗前1～3天監督下練習＋熟悉，非最大強度練；操作指南要寫熱身建議量。（出處：12-10）"},
+{c:"動作技術",q:"臥推時槓的觸胸位置約在？",o:["脖子","胸中下緣（乳線）","肚臍","額頭"],a:1,e:"太高壓肩，太低行程歪，手肘約45–75度。"},
+{c:"動作技術",q:"深蹲時膝蓋的安全原則是？",o:["完全不能超過腳尖","膝對腳尖、不內夾，行程自然","膝蓋打直鎖死","膝蓋互撞"],a:1,e:"超過腳尖不是原罪，內夾＋塌陷才是受傷主因。"},
+{c:"週期化",q:"過渡期（active rest）的目的是？",o:["完全躺平變胖","主動恢復＋心理充電","加量","比賽"],a:1,e:"低強度玩別的運動，季後充電再出發。"},
+{c:"設施管理",q:"訓練場地通風照明的意義是？",o:["省電","安全＋表現（看得見＋散熱）","裝飾","拍照"],a:1,e:"滑倒、中暑、看不清槓片都是管理疏失。"},
+{c:"運動科學",q:"牽張反射的主要受器＋效應是？",o:["GTO→放鬆","肌梭→同條肌肉收縮","眼睛→眨眼","耳朵→聽見"],a:1,e:"被快速拉長→反射性收縮，SSC的第一桶金。"},
+{c:"營養",q:"運動中水分補充的實用原則是？",o:["渴了再喝一點","少量多次＋含電解質，別等到渴爆","一次灌2000ml","不喝"],a:1,e:"賽前中後都要秤重，掉多少補多少是基本功。"},
+{c:"心理",q:"教練與選手關係最好的基礎是？",o:["罵越大聲越好","信任＋溝通＋明確角色","已讀不回","畫大餅"],a:1,e:"自主＋勝任＋歸屬感，自決理論的三根柱子。"},
+{c:"課表設計",q:"女性初學者練力量，最常見的迷思是？",o:["會變太壯（其實難如登天）","會變健康","會變有力","會睡更好"],a:0,e:"女性睪固酮低＋熱量常不夠，壯是大工程，先求動作＋漸進。"},
+{c:"課表設計",q:"年長者阻力訓練的首要目標是？",o:["拚1RM","維持快肌＋骨密＋平衡防跌","練腹肌線條","每天力竭"],a:1,e:"強度可到中高，但安全＋漸進＋衝擊＋平衡都要有。"},
+{c:"測驗評估",q:"體成分追蹤最實用的現場工具是？",o:["皮脂夾＋圍度＋體重（同一條件）","目測","摸骨","問星座"],a:0,e:"DEXA最準但貴，現場用皮脂＋圍度＋照片就夠。"},
+{c:"動作技術",q:"槓鈴肩推時，手腕應？",o:["過度後折","中立順槓（不折腕）","反手","放開"],a:1,e:"折腕＋大重量＝手腕地獄，握距＋肋骨位置一起調。"},
+{c:"設施管理",q:"EAP緊急應變計畫應包含？",o:["通報流程＋急救分工＋AED位置＋動線","午餐訂什麼","下班去哪玩","不用寫"],a:0,e:"每年演練＋張貼，救命流程不能現想。"},
+{c:"運動科學",q:"無氧閾值（乳酸閾值）越高代表？",o:["越容易累","能用更高強度撐更久","最大肌力越大","體重越重"],a:1,e:"Tempo跑就練這個，耐力選手的第二生命。"},
+{c:"課表設計",q:"課表寫「5RM」的意思是？",o:["做5組","只能做5下的重量","休息5分","5個人做"],a:1,e:"RM＝最多反覆次數，5RM約87%1RM，可直接開重量。"},
+{c:"心理",q:"賽前過度緊張（過喚醒）最快用的放鬆法是？",o:["多喝咖啡","橫膈膜呼吸＋漸進放鬆","罵自己","滑手機"],a:1,e:"呼吸是開關，賽前流程固定化＋關鍵字最穩。"},
+{c:"營養",q:"素食肌力選手最需注意補充？",o:["B12、鐵、鋅、蛋白總量","糖果","汽水","餅乾"],a:0,e:"蛋白種類＋總量＋肌酸，規劃好一樣能壯。"}
+];
+</script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const CATS=["全部","運動科學","心理","營養","測驗評估","動作技術","課表設計","週期化","復健","設施管理"];
+let curCat="全部",list=[],idx=0,score=0,right=0,wrong=0,streak=0,bestStreak=0,timer=null,timeLeft=0,answers=[];
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function best(){try{return localStorage.getItem("cscs_best")||"--";}catch(e){return "--";}}
+function setBest(v){try{if(best()==="--"||v>+best())localStorage.setItem("cscs_best",v);}catch(e){}}
+$("best").textContent="🏆 最佳："+best();
+$("totalQ").textContent=QUESTIONS.length;
+const cc=$("catChips");cc.innerHTML="";
+CATS.forEach(c=>{const n=c==="全部"?QUESTIONS.length:QUESTIONS.filter(q=>q.c===c).length;if(c!=="全部"&&n===0)return;
+const b=document.createElement("button");b.className="chip"+(c===curCat?" active":"");b.textContent=c+" ("+n+")";
+b.onclick=()=>{curCat=c;cc.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));b.classList.add("active");};cc.appendChild(b);});
+function pop(e){const el=$("bigEmoji");el.textContent=e;el.classList.remove("pop");void el.offsetWidth;el.classList.add("pop");}
+$("startBtn").onclick=()=>{
+let pool=curCat==="全部"?QUESTIONS.slice():QUESTIONS.filter(q=>q.c===curCat);
+if(!pool.length){alert("此分類尚無題目");return;}
+pool=shuffle(pool);
+let n=parseInt($("qCount").value,10)||20;list=pool.slice(0,Math.min(n,pool.length));
+if($("shuffleOpt").checked)list=list.map(q=>{const ord=shuffle([0,1,2,3]);return{c:q.c,q:q.q,o:ord.map(i=>q.o[i]),a:ord.indexOf(q.a),e:q.e};});
+idx=0;score=0;right=0;wrong=0;streak=0;bestStreak=0;answers=[];
+$("setupPanel").classList.add("hidden");$("resultPanel").classList.add("hidden");$("quizPanel").classList.remove("hidden");
+renderQ();};
+function stopTimer(){if(timer){clearInterval(timer);timer=null;}$("timerBar").style.width="100%";}
+function renderQ(){
+stopTimer();const q=list[idx];
+$("qNum").textContent="Q"+(idx+1)+"/"+list.length;$("qCat").textContent=q.c+"｜"+curCat;
+$("qtext").textContent=q.q;
+$("progBar").style.width=(idx/list.length*100)+"%";
+const box=$("opts");box.innerHTML="";const ex=$("explain");ex.className="";ex.innerHTML="";$("nextBtn").classList.add("hidden");
+const letters=["A","B","C","D"];
+q.o.forEach((t,i)=>{const btn=document.createElement("button");btn.className="opt";
+btn.innerHTML='<span class="letter">'+letters[i]+'</span>'+t;
+btn.onclick=()=>answer(i,btn);box.appendChild(btn);});
+const secs=parseInt($("qTime").value,10)||0;
+if(secs>0){timeLeft=secs;$("timerWrap").style.display="block";$("timerBar").style.width="100%";
+timer=setInterval(()=>{timeLeft-=0.2;$("timerBar").style.width=Math.max(0,timeLeft/secs*100)+"%";
+if(timeLeft<=0){stopTimer();answer(-1,null);}},200);
+}else{$("timerWrap").style.display="none";}
+}
+function answer(pick,btn){
+stopTimer();const q=list[idx];const ok=pick===q.a;
+const btns=$("opts").querySelectorAll(".opt");
+btns.forEach((b,i)=>{b.disabled=true;if(i===q.a)b.classList.add("correct");});
+if(ok){right++;streak++;bestStreak=Math.max(bestStreak,streak);score+=10+Math.min(streak*2,20);pop(streak>=3?"🔥":"🎉");}
+else{wrong++;streak=0;if(btn)btn.classList.add("wrong");pop("💥");document.body.classList.add("shake");setTimeout(()=>document.body.classList.remove("shake"),550);}
+answers.push({q:q,pick:pick,ok:ok});
+$("stScore").textContent=score;$("stRight").textContent=right;$("stWrong").textContent=wrong;$("stStreak").textContent=streak;
+$("combo").textContent="🔥 連對 "+streak;
+const ex=$("explain");ex.innerHTML=(ok?"<b>⭕ 答對！</b> ":"<b>❌ 答錯！</b>正解是 "+["A","B","C","D"][q.a]+"："+q.o[q.a]+"<br>")+q.e;ex.classList.add("show");
+$("nextBtn").textContent=idx<list.length-1?"下一題 →":"看成績單 🏁";
+$("nextBtn").classList.remove("hidden");
+}
+$("nextBtn").onclick=()=>{if(idx<list.length-1){idx++;renderQ();}else{finish();}};
+$("quitBtn").onclick=()=>finish();
+function finish(){
+stopTimer();$("quizPanel").classList.add("hidden");$("resultPanel").classList.remove("hidden");
+const total=list.length,rate=total?Math.round(right/total*100):0;
+$("rScore").textContent=score;$("rRate").textContent=rate+"%";
+let g=rCompare(rate);$("rGrade").textContent=g;
+$("rComment").textContent="本次："+curCat+" "+total+"題，答對"+right+"題、答錯"+wrong+"題，最高連對"+bestStreak+"。"+(rate>=70?"✅ 已達CSCS及格門檻水準，繼續保持！":"💪 未達70%門檻，去翻重點總整理PDF再回來挑戰！");
+setBest(score);$("best").textContent="🏆 最佳："+best();
+const rv=$("review");rv.innerHTML="";
+answers.forEach((r,i)=>{const d=document.createElement("div");d.className="review-item "+(r.ok?"ok":"ng");
+d.innerHTML="<b>Q"+(i+1)+" ["+r.q.c+"]</b> "+r.q.q+"<br>你的答案："+(r.pick<0?"⏱ 時間到未作答":r.q.o[r.pick])+(r.ok?" ⭕":" ❌（正解："+r.q.o[r.q.a]+"）")+"<br><span style='color:#666'>"+r.q.e+"</span>";rv.appendChild(d);});
+window.scrollTo(0,0);
+}
+function rCompare(r){if(r>=90)return"🏆 專家";if(r>=80)return"🥇 優秀";if(r>=70)return"✅ 及格";if(r>=60)return"📖 待加強";return"🔰 新手";}
+$("retryBtn").onclick=()=>{$("resultPanel").classList.add("hidden");$("setupPanel").classList.remove("hidden");window.scrollTo(0,0);};
+$("homeBtn").onclick=()=>{$("resultPanel").classList.add("hidden");$("setupPanel").classList.remove("hidden");$("totalQ").textContent=QUESTIONS.length;window.scrollTo(0,0);};
+})();
+</script>
+</body>
+</html>
